@@ -11,10 +11,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/charts": "^7.5.1",
+    "@mantine/core": "^7.5.1",
+    "@mantine/form": "^7.5.1",
+    "@mantine/hooks": "^7.5.1",
+    "@mantine/modals": "^7.5.1",
+    "@mantine/notifications": "^7.5.1",
+    "@tabler/icons-react": "^2.47.0",
     "concurrently": "^8.2.2",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "recharts": "2"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -22,6 +30,9 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.34",
+    "postcss-preset-mantine": "^1.13.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5"
   }
 }
