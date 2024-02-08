@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Grid, GridCol, Card, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye, IconTrash, IconPlus } from "@tabler/icons-react";
 import LineChart from "@/components/charts/LineChart";
+import Help from "@/components/ui/Help";
 
 
 export default function CompareRepoPage() {
@@ -17,6 +18,9 @@ export default function CompareRepoPage() {
 
   return (
     <Card shadow="sm" padding="md" radius="md">
+      <Box ta="right">
+        <Help content={"Help Text"}/>
+      </Box>
       <Flex
         mih={50}
         gap="md"

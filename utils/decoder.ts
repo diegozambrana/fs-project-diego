@@ -8,7 +8,6 @@ export const decoderRepos = (input: any) => {
         owner: rep.split('%40')[0],
         repo_name: rep.split('%40')[1]
     }))
-    // console.log(data_list)
 
     return data_list
 };

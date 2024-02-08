@@ -9,7 +9,7 @@ export default function Home() {
     <main className={styles.main}>
       <Card shadow="sm" padding="md" radius="md">
         <Box ta="right">
-          <Help />
+          <Help content={"Help Text"}/>
         </Box>
         <Text my="1rem" ta="center">
           You must to search a repository or library to compare.
