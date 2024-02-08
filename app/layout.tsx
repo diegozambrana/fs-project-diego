@@ -5,7 +5,7 @@ import '@mantine/core/styles.css';
 
 import { ColorSchemeScript, Container, MantineProvider, createTheme } from '@mantine/core';
 import { Grid, GridCol } from '@mantine/core';
-import { HeaderTabs } from "@/components/layouts/HeaderTabs";
+import { Header } from "@/components/layouts/Header";
 import Sidebar from "@/components/layouts/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,7 +31,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider theme={theme}>
-          <HeaderTabs />
+          <Header />
           <Container size="md">
             <Grid>
               <GridCol span={12}>
