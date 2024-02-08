@@ -1,8 +1,8 @@
 import styles from "./page.module.css";
 import { Box, Card } from "@mantine/core";
 import { Text } from '@mantine/core';
-import ButtonBase from "@/components/ui/Button";
 import Help from "@/components/ui/Help";
+import SearchModal from "@/components/modal/SearchModal";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
           You must to search a repository or library to compare.
         </Text>
         <Box ta="center" my="1rem">
-          <ButtonBase>Add repository</ButtonBase>
+          <SearchModal />
         </Box>
       </Card>
     </main>
