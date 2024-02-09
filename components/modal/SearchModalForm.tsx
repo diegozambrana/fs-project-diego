@@ -1,9 +1,11 @@
 'use client';
+import { getRepository } from "@/hooks/api/repository";
 import { validateGitHubOrg, validateGitHubRepo } from "@/utils/validator";
 import { Box, Button, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form"
-import { redirect } from "next/navigation";
 import { useRouter } from 'next/navigation'
+import { notifications } from '@mantine/notifications';
+import { useRepository } from "@/hooks/api/useRepository";
 
 interface SearchModalFormProps {
   onClose: () => void;
@@ -15,6 +17,7 @@ interface SearchModalFormProps {
 * This is a form to search a repository or library to compare.
 */
 export default function SearchModalForm({onClose, typeData}: SearchModalFormProps) {
+  const { getRepository, isLoading } = useRepository();
   const form = useForm({
     initialValues: {
       repository: "",
@@ -37,16 +40,23 @@ export default function SearchModalForm({onClose, typeData}: SearchModalFormProp
   const label = typeData === "repo" ? "Repository" : "Organization";
   
   
-  const onSubmit = (values: any) => {
-    onClose()
-    // TODO: Search repository and redirect to /compare
-    console.log(values)
-    const isValid = true
-    const owner = "facebook";
-    const repoName = "react";
+  const onSubmit = async (values: any) => {
+    const repoSplit = values.repository.split("/")
+    const owner = repoSplit.at(-2)
+    const repoName = repoSplit.at(-1)
 
-    if (isValid) {
-      router.push(`/compareRepo/${owner}@${repoName}`);
+    // Fetch the repository to verify if exists and redirect to compareRepo page
+    if(!isLoading){
+      getRepository(owner, repoName).then((res: any) => {
+        router.push(`/compareRepo/${owner}@${repoName}`);
+        onClose();
+      }).catch((err: any) => {
+        notifications.show({
+          title: 'Error',
+          message: err.response.data.detail,
+          color: 'red',
+        })
+      })
     }
   }
 

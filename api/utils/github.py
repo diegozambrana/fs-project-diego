@@ -16,8 +16,8 @@ _ = load_dotenv(find_dotenv())
 GITHUB_TOKEN = os.environ['GITHUB_ACCESS_TOKEN']
 GITHUB_API_URL = 'https://api.github.com'
 GITHUB_API_HEADERS = {
-    'Authorization': f'Bearer {GITHUB_TOKEN}',
-    'accept': 'application/vnd.github.v3.star+json' 
+    'Authorization': f'token {GITHUB_TOKEN}',
+    'accept': 'application/vnd.github.v3.star+json'
 }
 PER_PAGE = 30
 
@@ -43,7 +43,7 @@ def get_repo_star_history_per_page(owner, repo_name, page):
 
 def get_repo_data(owner, repo_name):
     url_api = f'{GITHUB_API_URL}/repos/{owner}/{repo_name}'
-    response_api = requests.get(url_api)
+    response_api = requests.get(url_api, headers=GITHUB_API_HEADERS)
 
     if response_api.status_code != 200:
         return None

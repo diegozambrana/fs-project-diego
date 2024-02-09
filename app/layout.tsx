@@ -8,6 +8,9 @@ import { Grid, GridCol } from '@mantine/core';
 import { Header } from "@/components/layouts/Header";
 import Sidebar from "@/components/layouts/Sidebar";
 
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -31,6 +34,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider theme={theme}>
+          <Notifications />
           <Header />
           <Container size="md">
             <Grid>
