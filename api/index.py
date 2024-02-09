@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from api.routes import github
 
 app = FastAPI()
 
-@app.get("/api/python")
-def hello_world():
-    return {"message": "Hello World"}
+app.include_router(github.router)
