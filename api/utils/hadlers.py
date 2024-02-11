@@ -9,3 +9,14 @@ def get_repo_format(response):
         'html_url': response['html_url'],
         'language': response['language'],
     }
+
+def get_organization_format(response):
+    return {
+        'login': response['login'],
+        'name': response['name'],
+        'avatar_url': response['avatar_url'],
+        'html_url': response['html_url'],
+        'description': response['description'],
+        'created_at': response['created_at'],
+        'public_repos': response['public_repos'],
+    }

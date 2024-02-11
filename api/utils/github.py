@@ -22,6 +22,15 @@ GITHUB_API_HEADERS = {
 PER_PAGE = 30
 
 
+def get_organization_data(organization):
+    url_api = f'{GITHUB_API_URL}/orgs/{organization}'
+    response_api = requests.get(url_api, headers=GITHUB_API_HEADERS)
+
+    if response_api.status_code != 200:
+        return None
+
+    return response_api.json()
+
 def get_repo_star_history_per_page(owner, repo_name, page):
     url = f'https://api.github.com/repos/{owner}/{repo_name}/stargazers'
     params = { 'per_page': PER_PAGE, 'page': page }

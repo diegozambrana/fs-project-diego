@@ -1,7 +1,11 @@
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, Depends
-from api.utils.github import get_repo_data, get_repo_stargazers_history
-from api.utils.hadlers import get_repo_format
+from fastapi import APIRouter, HTTPException
+from api.utils.github import (
+    get_repo_data,
+    get_repo_stargazers_history,
+    get_organization_data
+)
+from api.utils.hadlers import get_repo_format, get_organization_format
 
 import logging
 import sys
@@ -49,6 +53,39 @@ async def read_repositories(query: str):
     }
     return data
 
+@router.get("/get_organizations")
+def read_organization(query: str):
+    """
+    Get organization by list of organization names
+    """
+    logger.info('read_organization!!!!')
+    logger.info(query)
+    if query is None:
+        raise HTTPException(status_code=404, detail="organizations not found")
+    
+    d = query.split(',')
+    
+    fails = []
+    success = []
+
+    for org in d:
+
+        if org is None:
+            fails.append(org)
+
+        org_data = get_organization_data(org)
+        
+        if org_data is None:
+            fails.append(f"{org_data}")
+        else:
+            success.append(get_organization_format(org_data))
+
+    data = {
+        'success': success,
+        'fails': fails,
+    }
+    return data
+
 
 @router.get("/{owner}/{repo_name}")
 async def read_repository(owner: str, repo_name: str):
@@ -87,3 +124,19 @@ def read_stargazers(owner: str, repo_name: str):
         raise HTTPException(status_code=404, detail="Repository not found")
 
     return data
+
+
+@router.get("/org/{name}")
+def read_owner_repositories(name: str):
+    """
+    Get repositories by owner
+    """
+    if name is None:
+        raise HTTPException(status_code=404, detail="organization not found")
+
+    org = get_organization_data(name)
+
+    if org is None:
+        raise HTTPException(status_code=404, detail="organization not found")
+
+    return get_organization_format(org)
