@@ -1,11 +1,11 @@
 'use client';
-import { getRepository } from "@/hooks/api/repository";
 import { validateGitHubOrg, validateGitHubRepo } from "@/utils/validator";
 import { Box, Button, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form"
-import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications';
 import { useRepository } from "@/hooks/api/useRepository";
+import { useContext } from "react";
+import { DashboardRepositoryContext } from "../dashboardRepository/DashboardContext";
 
 interface SearchModalFormProps {
   onClose: () => void;
@@ -16,8 +16,12 @@ interface SearchModalFormProps {
 * SearchModalForm
 * This is a form to search a repository or library to compare.
 */
-export default function SearchModalForm({onClose, typeData}: SearchModalFormProps) {
+export default function SearchModalForm({
+  onClose,
+  typeData,
+}: SearchModalFormProps) {
   const { getRepository, isLoading } = useRepository();
+  const { addRepository } = useContext(DashboardRepositoryContext)
   const form = useForm({
     initialValues: {
       repository: "",
@@ -31,7 +35,6 @@ export default function SearchModalForm({onClose, typeData}: SearchModalFormProp
         : null
     },
   });
-  const router = useRouter()
 
   const placeholder_text = typeData === "repo"
     ? `"facebook/react" or "https://github.com/facebook/react"`
@@ -48,7 +51,7 @@ export default function SearchModalForm({onClose, typeData}: SearchModalFormProp
     // Fetch the repository to verify if exists and redirect to compareRepo page
     if(!isLoading){
       getRepository(owner, repoName).then((res: any) => {
-        router.push(`/compareRepo/${owner}@${repoName}`);
+        addRepository(res.data);
         onClose();
       }).catch((err: any) => {
         notifications.show({
@@ -94,6 +97,7 @@ export default function SearchModalForm({onClose, typeData}: SearchModalFormProp
           />
         </Box>
         <Box ta="right">
+          <Button mr="1rem" color="gray" onClick={onClose}>Cancel</Button>
           <Button type="submit">Search</Button>
         </Box>
       </form>
