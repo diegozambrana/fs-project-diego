@@ -3,15 +3,18 @@
 import { Box, Button, Modal, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconTrash } from "@tabler/icons-react";
-import { useRouter } from 'next/navigation'
+import { useContext } from 'react';
+import { DashboardRepositoryContext } from '../dashboardRepository/DashboardContext';
+// import { useRouter } from 'next/navigation'
 
 
 export default function CleanRepo() {
   const [opened, { open, close }] = useDisclosure(false);
-  const router = useRouter()
+  const {clean} = useContext(DashboardRepositoryContext);
 
   const onClean = () => {
-    router.push('/compareRepo')
+    clean();
+    close();
   }
 
   return (

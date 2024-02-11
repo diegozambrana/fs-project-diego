@@ -11,11 +11,10 @@ import CleanRepo from "@/components/modal/CleanRepo";
 import { DashboardRepositoryContext } from "./DashboardContext";
 
 
-
 const Dashboard: FC = () => {
   const [ checked, setChecked ] = useState(false);
   const { getRepositoryStarHistory, isLoading: isLoadingSH } = useRepositoryStarHistory()
-  const { repositories } = useContext(DashboardRepositoryContext);
+  const { repositories, removeRepository, toggleVisibility } = useContext(DashboardRepositoryContext);
 
   // TODO: move the logic of this to context
   const getRepoStarHistory = useCallback(async (owner: string, repo_name: string) => {
@@ -85,13 +84,19 @@ const Dashboard: FC = () => {
                       variant="default"
                       radius="xl"
                       aria-label="Settings"
+                      onClick={() => toggleVisibility(repo)}
                     >
-                      <IconEye style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      {repo.visible ? (
+                        <IconEye style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      ) : (
+                        <IconEyeOff style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      )}
                     </ActionIcon>
                     <ActionIcon
                       variant="default"
                       radius="xl"
                       aria-label="Settings"
+                      onClick={() => removeRepository(repo)}
                     >
                       <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
                     </ActionIcon>
