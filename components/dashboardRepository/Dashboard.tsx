@@ -1,6 +1,7 @@
 'use client';
 import { FC, useState, useContext, useCallback, useRef } from "react";
-import { Grid, GridCol, Card, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
+import { Grid, GridCol, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
+import { notifications } from '@mantine/notifications';
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
 import Help from "@/components/ui/Help";
 
@@ -14,6 +15,7 @@ import { toPng } from 'html-to-image';
 
 const Dashboard: FC = () => {
   const [ checked, setChecked ] = useState(false);
+  const [ copied, setCopied ] = useState(false);
   const {
     repositories,
     removeRepository,
@@ -54,6 +56,24 @@ const Dashboard: FC = () => {
       })
   }, [chartRef])
 
+  const onCopyUrl = () => {
+    if(!copied){
+      const el = document.createElement('input');
+      el.value = window.location.href;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      notifications.show({
+        message: 'Copied to clipboard',
+      });
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 5000);
+    }
+  }
+
   return (
     <Box>
       <Box ta="right">
@@ -81,7 +101,11 @@ const Dashboard: FC = () => {
           >Download PNG</Button>
         </Box>
         <Box>
-          <Button rightSection={<IconLink size={14} />}>Share Link</Button>
+          <Button
+            rightSection={<IconLink size={14} />}
+            onClick={onCopyUrl}
+            disabled={copied}
+          >{copied ? 'Copied Link' :`Copy Link`}</Button>
         </Box>
       </Flex>
       <Grid mt="2rem">
