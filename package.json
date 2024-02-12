@@ -39,5 +39,7 @@
     "postcss-simple-vars": "^7.0.1",
     "typescript": "^5"
   },
-  "engines": { "node": "18.x" }
+  "engines": {
+    "node": "18.x"
+  }
 }

@@ -1,5 +1,6 @@
 'use client';
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, BaseSyntheticEvent } from "react";
+import { CSVLink, CSVDownload } from "react-csv";
 import { Grid, GridCol, Card, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
 import Help from "@/components/ui/Help";
@@ -8,6 +9,7 @@ import AddNew from "@/components/modal/AddNewRepo";
 import CleanRepo from "@/components/modal/CleanRepo";
 import { DashboardRepositoryContext } from "./DashboardContext";
 import { TimeSerieChart } from "../charts/TimeSerieChart";
+import { generateCSVDataFromSeries } from "@/utils/csv";
 
 
 const Dashboard: FC = () => {
@@ -16,9 +18,24 @@ const Dashboard: FC = () => {
     repositories,
     removeRepository,
     toggleVisibility,
+    series,
     filteredSeries,
     loadingSeries,
   } = useContext(DashboardRepositoryContext);
+
+  console.log('test')
+
+  const downloadTxtFile = () => {
+    const element = document.createElement("a");
+    const csvData = generateCSVDataFromSeries(series);
+    const file = new Blob([csvData], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    const currentDate = (new Date()).toISOString();
+    element.download = `nixtla_tracker_${currentDate}.csv`;
+    document.body.appendChild(element);
+    element.click();
+  }
+
 
   return (
     <Box>
@@ -34,7 +51,11 @@ const Dashboard: FC = () => {
         wrap="wrap"
       >
         <Box>
-          <Button rightSection={<IconDownload size={14} />}>Download CSV</Button>
+          <input id="myInput" hidden/>
+          <Button
+            rightSection={<IconDownload size={14} />}
+            onClick={downloadTxtFile}
+          >Download CSV</Button>
         </Box>
         <Box>
           <Button rightSection={<IconPhoto size={14} />}>Download PNG</Button>
