@@ -71,7 +71,9 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const addRepository = (repository: DashboardRepositoryType) => {
     updateHasByNewRepo(repository);
     if(repositories.filter((repo) => repo.full_name === repository.full_name).length == 0){
-      setRepositories([...repositories, {...repository, visible: true}]);
+      const new_repo = {...repository, visible: true};
+      getRepositoryHistory(new_repo);
+      setRepositories([...repositories, new_repo]);
     }
   };
 
@@ -94,7 +96,20 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
     setHash(window.location.hash);
   }
 
+  const getRepositoryHistory = async (repository: DashboardRepositoryType) => {
+    setLoadingSeries(true);
+    const response = await getRepositoryStarHistory(repository.owner, repository.name);
+    if(response.length !== 0){
+      setSeries((prev) => {
+        const new_series = prev.filter((serie) => serie.name !== repository.full_name);
+        return [...new_series, {name: repository.full_name, data: response}];
+      });
+      setLoadingSeries(false);
+    }
+  }
+
   useEffect(() => {
+    // run to get repositories from hash when the page is loaded
     if(dataFromHash.length > 0 && repositories.length === 0){
       getRepositories(dataFromHash).then((response: any) => {
         setRepositories(
