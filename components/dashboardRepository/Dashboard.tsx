@@ -1,6 +1,5 @@
 'use client';
-import { FC, useState, useContext, BaseSyntheticEvent } from "react";
-import { CSVLink, CSVDownload } from "react-csv";
+import { FC, useState, useContext, useCallback, useRef } from "react";
 import { Grid, GridCol, Card, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
 import Help from "@/components/ui/Help";
@@ -10,6 +9,7 @@ import CleanRepo from "@/components/modal/CleanRepo";
 import { DashboardRepositoryContext } from "./DashboardContext";
 import { TimeSerieChart } from "../charts/TimeSerieChart";
 import { generateCSVDataFromSeries } from "@/utils/csv";
+import { toPng } from 'html-to-image';
 
 
 const Dashboard: FC = () => {
@@ -23,9 +23,9 @@ const Dashboard: FC = () => {
     loadingSeries,
   } = useContext(DashboardRepositoryContext);
 
-  console.log('test')
+  const chartRef = useRef<HTMLDivElement>(null)
 
-  const downloadTxtFile = () => {
+  const onDownloadCSV = () => {
     const element = document.createElement("a");
     const csvData = generateCSVDataFromSeries(series);
     const file = new Blob([csvData], {type: 'text/plain'});
@@ -36,6 +36,23 @@ const Dashboard: FC = () => {
     element.click();
   }
 
+  const onDownloadPNG = useCallback(() => {
+    if (chartRef.current === null) {
+      return
+    }
+
+    toPng(chartRef.current, { cacheBust: true, })
+      .then((dataUrl) => {
+        const link = document.createElement('a')
+        const currentDate = (new Date()).toISOString();
+        link.download = `nixtla_tracker_${currentDate}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [chartRef])
 
   return (
     <Box>
@@ -54,11 +71,14 @@ const Dashboard: FC = () => {
           <input id="myInput" hidden/>
           <Button
             rightSection={<IconDownload size={14} />}
-            onClick={downloadTxtFile}
+            onClick={onDownloadCSV}
           >Download CSV</Button>
         </Box>
         <Box>
-          <Button rightSection={<IconPhoto size={14} />}>Download PNG</Button>
+          <Button
+            rightSection={<IconPhoto size={14} />}
+            onClick={onDownloadPNG}
+          >Download PNG</Button>
         </Box>
         <Box>
           <Button rightSection={<IconLink size={14} />}>Share Link</Button>
@@ -67,7 +87,14 @@ const Dashboard: FC = () => {
       <Grid mt="2rem">
         <GridCol span={8}>
           <div>
-            {loadingSeries ? <div>Loading...</div> : <TimeSerieChart series={filteredSeries} />}
+            {loadingSeries
+              ? <div>Loading...</div>
+              : (
+                <div ref={chartRef}>
+                  <TimeSerieChart series={filteredSeries} />
+                </div>
+              )
+            }
           </div>          
         </GridCol>
         <GridCol span={4}>
