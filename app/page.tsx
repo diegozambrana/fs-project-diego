@@ -1,27 +1,28 @@
 import styles from "./page.module.css";
-import { Box, Card } from "@mantine/core";
+import { Box, Card, Title } from "@mantine/core";
 import { Text } from '@mantine/core';
 import Help from "@/components/ui/Help";
 import SearchModal from "@/components/modal/SearchModal";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className={styles.main}>
       <Card shadow="sm" padding="md" radius="md">
-        <Box ta="right">
-          <Help content={"Help Text"}/>
-        </Box>
-        <Text my="1rem" ta="center">
-          You must to search a repository or library to compare.
+        <Title>Search repositories or organization data</Title>
+        <Text>
+          If you want to search stargazers data history from a repository need
+          to redirect to the search repository Dashboard.
         </Text>
-        <Box ta="center" my="1rem">
-          <SearchModal typeData="repo" />
+        <Box my="1rem">
+          <Link href="/compareRepo">Dashboard to compare repositories</Link>
         </Box>
-        <Text my="1rem" ta="center">
-          You Also can search a complete organization 
+        <Text>
+          If you want to search stargazers data history from an organization need
+          to redirect to the search organization Dashboard.
         </Text>
-        <Box ta="center" my="1rem">
-          <SearchModal typeData="org" />
+        <Box mt="1rem">
+          <Link href="/compareOrg">Dashboard to compare organizations</Link>
         </Box>
       </Card>
     </main>

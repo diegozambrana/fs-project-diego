@@ -18,6 +18,9 @@ export interface DashboardRepoContextType {
       owner: string;
       name: string;
     }[];
+    series: SerieType[];
+    filteredSeries: SerieType[];
+    loadingSeries: boolean;
   
     setLoading: (loading: boolean) => void;
     addRepository: (repository: DashboardRepositoryType) => void;
@@ -29,4 +32,9 @@ export interface DashboardRepoContextType {
 
 export interface DashboardRepositoryProviderProps {
     children: React.ReactNode;
+}
+
+export interface SerieType {
+    name: string;
+    data: {count: number, date: string}[];
 }

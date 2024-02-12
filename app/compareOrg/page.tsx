@@ -12,10 +12,11 @@ export default function CompareOrg() {
         </Box>
         <Text my="1rem" ta="center">
           You Also can search a complete organization 
+          <br /> Under development
         </Text>
-        <Box ta="center" my="1rem">
+        {/* <Box ta="center" my="1rem">
           <SearchModal typeData="org" />
-        </Box>
+        </Box> */}
       </Card>
     </main>
   );

@@ -1,25 +1,24 @@
 'use client';
-import { FC, useCallback, useState, useContext } from "react";
+import { FC, useState, useContext } from "react";
 import { Grid, GridCol, Card, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
-import LineChart from "@/components/charts/LineChart";
 import Help from "@/components/ui/Help";
 
-import { useRepositoryStarHistory } from "@/hooks/api/useStarData";
 import AddNew from "@/components/modal/AddNewRepo";
 import CleanRepo from "@/components/modal/CleanRepo";
 import { DashboardRepositoryContext } from "./DashboardContext";
+import { TimeSerieChart } from "../charts/TimeSerieChart";
 
 
 const Dashboard: FC = () => {
   const [ checked, setChecked ] = useState(false);
-  const { getRepositoryStarHistory, isLoading: isLoadingSH } = useRepositoryStarHistory()
-  const { repositories, removeRepository, toggleVisibility } = useContext(DashboardRepositoryContext);
-
-  // TODO: move the logic of this to context
-  const getRepoStarHistory = useCallback(async (owner: string, repo_name: string) => {
-    const response = await getRepositoryStarHistory(owner, repo_name)
-  }, [getRepositoryStarHistory])
+  const {
+    repositories,
+    removeRepository,
+    toggleVisibility,
+    filteredSeries,
+    loadingSeries,
+  } = useContext(DashboardRepositoryContext);
 
   return (
     <Box>
@@ -46,7 +45,9 @@ const Dashboard: FC = () => {
       </Flex>
       <Grid mt="2rem">
         <GridCol span={8}>
-          <LineChart />
+          <div>
+            {loadingSeries ? <div>Loading...</div> : <TimeSerieChart series={filteredSeries} />}
+          </div>          
         </GridCol>
         <GridCol span={4}>
           <Box>

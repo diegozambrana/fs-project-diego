@@ -7,7 +7,6 @@ import SearchModal from "../modal/SearchModal";
 
 export const DashboardRepositoryWrapper: FC = () => {
   const {hash, loading} = useContext(DashboardRepositoryContext);
-  console.log(hash, loading);
 
   if(loading){
     return <p>Loading...</p>

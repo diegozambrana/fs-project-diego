@@ -7,25 +7,31 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from "react";
 import {
   DashboardRepoContextType,
   DashboardRepositoryType,
-  DashboardRepositoryProviderProps
+  DashboardRepositoryProviderProps,
+  SerieType
 } from "./DashboardTypes";
+import { useRepositoryStarHistory } from "@/hooks/api/useStarData";
 
 export const DashboardRepositoryContext = createContext<DashboardRepoContextType>({
   hash: null,
   loading: true,
   repositories: [],
   dataFromHash: [],
+  series: [],
+  filteredSeries: [],
+  loadingSeries: true,
   setLoading: () => {},
   addRepository: () => {},
   removeRepository: () => {},
   reviewHash: () => {},
   clean: () => {},
-  toggleVisibility: () => {}
+  toggleVisibility: () => {},
 });
 
 export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> = ({children}) => {
@@ -33,10 +39,17 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const [loading, setLoading] = useState<boolean>(true);
   const [repositories, setRepositories] = useState<DashboardRepositoryType[]>([]);
   const dataFromHash = useMemo(() => {
-    console.log('--.', hash)
     return decodeHash(hash);
   }, [hash]);
+  const [loadingSeries, setLoadingSeries] = useState<boolean>(false);
+  const [series, setSeries] = useState<SerieType[]>([]);
+  const filteredSeries = useMemo(() => {
+    const full_name_repositories = repositories.filter((repo) => repo.visible).map((repo) => repo.full_name);
+    return series.filter((serie) => full_name_repositories.includes(serie.name));
+  }, [series, repositories]);
   const { getRepositories } = useRepository();
+  const { getRepositoryStarHistory } = useRepositoryStarHistory();
+  const count = useRef(0);
 
   useEffect(() => {
     setHash(window.location.hash);
@@ -58,7 +71,7 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const addRepository = (repository: DashboardRepositoryType) => {
     updateHasByNewRepo(repository);
     if(repositories.filter((repo) => repo.full_name === repository.full_name).length == 0){
-      setRepositories([...repositories, repository]);
+      setRepositories([...repositories, {...repository, visible: true}]);
     }
   };
 
@@ -91,10 +104,38 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
     }
   }, [dataFromHash, getRepositories, repositories]);
 
+  const getFirstCallRepositoryStarHistory = async () => {
+    repositories.forEach( async (repo) => {
+      const response = await getRepositoryStarHistory(repo.owner, repo.name);
+      if(response.length !== 0){
+        setSeries((prev) => {
+          const new_series = prev.filter((serie) => serie.name !== repo.full_name);
+          return [...new_series, {name: repo.full_name, data: response}];
+        });
+      }
+      count.current += 1;
+      if(count.current >= repositories.length){
+        setLoadingSeries(false);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if(
+      repositories.length > 0
+      && !loadingSeries
+      && series.length === 0
+      && repositories.length !== series.length
+    ){
+      getFirstCallRepositoryStarHistory();
+    }
+  }, [repositories, getRepositoryStarHistory, loadingSeries, series])
+
   const clean = useCallback(() => {
     // Clean all repositories and remove hash
     setHash("");
     setRepositories([]);
+    setSeries([]);
     window.location.hash = "";
   }, []);
 
@@ -115,6 +156,9 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
         loading,
         repositories,
         dataFromHash,
+        series,
+        loadingSeries,
+        filteredSeries,
         setLoading,
         reviewHash,
         addRepository,
@@ -123,7 +167,6 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
         toggleVisibility
       }}
     >
-      <div>{hash}</div>
       {children}
     </DashboardRepositoryContext.Provider>
   );
