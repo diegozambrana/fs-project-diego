@@ -13,16 +13,20 @@ interface TimeSerieChartType{
   series: {
     name: string;
     data: {count: number, date: string}[];
+  }[],
+  predictions: {
+    name: string;
+    data: {count: number, date: string}[];
   }[]
 }
 
-export const TimeSerieChart: FC<TimeSerieChartType> = ({series}) => {
+export const TimeSerieChart: FC<TimeSerieChartType> = ({series, predictions}) => {
   const accessors = {
-    xAccessor: (d: any) => new Date(`${d.date}T00:00:00`),
+    xAccessor: (d: any) => d ? new Date(`${d.date}T00:00:00`) : null,
     yAccessor: (d: any) => d.count,
   };
 
-  if (!series) {
+  if (!series && !predictions) {
     return <div>...</div>;
   }
 
@@ -33,7 +37,20 @@ export const TimeSerieChart: FC<TimeSerieChartType> = ({series}) => {
       <AnimatedAxis orientation="left" numTicks={4} />
       <AnimatedGrid columns={false} numTicks={4} />
       {series.map((serie, index) => (
-        <AnimatedLineSeries key={serie.name} dataKey={serie.name} data={serie.data} {...accessors} />
+        <AnimatedLineSeries
+          key={serie.name}
+          dataKey={serie.name}
+          data={serie.data}
+          {...accessors}
+        />
+      ))}
+      {predictions.map((prediction, index) => (
+        <AnimatedLineSeries
+          key={`p_${prediction.name}`}
+          dataKey={`p_${prediction.name}`}
+          data={prediction.data}
+          {...accessors}
+        />
       ))}
       <Tooltip
         snapTooltipToDatumX
@@ -45,7 +62,7 @@ export const TimeSerieChart: FC<TimeSerieChartType> = ({series}) => {
               <div style={{ color: colorScale(tooltipData.nearestDatum.key) }}>
                 {tooltipData.nearestDatum.key}
               </div>
-              {accessors.xAccessor(tooltipData.nearestDatum.datum).toISOString().split('T')[0]}
+              {accessors.xAccessor(tooltipData.nearestDatum.datum)?.toISOString().split('T')[0]}
               {", "}
               {accessors.yAccessor(tooltipData.nearestDatum.datum)}
             </div>

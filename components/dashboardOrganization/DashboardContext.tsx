@@ -25,6 +25,8 @@ export const DashboardOrganizationContext = createContext<DashboardRepoContextTy
   dataFromHash: [],
   series: [],
   filteredSeries: [],
+  predictions: [],
+  filteredPredictions: [],
   loadingSeries: true,
   setLoading: () => {},
   addOrganization: () => {},
@@ -43,6 +45,11 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
   }, [hash]);
   const [loadingSeries, setLoadingSeries] = useState<boolean>(false);
   const [series, setSeries] = useState<SerieType[]>([]);
+  const [predictions, setPredictions] = useState<SerieType[]>([]);
+  const filteredPredictions = useMemo(() => {
+    const full_name_repositories = organizations.filter((org) => org.visible).map((org) => org.login);
+    return predictions.filter((prediction) => full_name_repositories.includes(prediction.name));
+  }, [predictions, organizations]);
   const filteredSeries = useMemo(() => {
     const full_name_repositories = organizations.filter((org) => org.visible).map((org) => org.login);
     return series.filter((serie) => full_name_repositories.includes(serie.name));
@@ -100,10 +107,14 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
   const getOrganizationHistory = async (organization: DashboardOrganizationType) => {
     setLoadingSeries(true);
     const response = await getOrganizationStarHistory(organization.login);
-    if(response.length !== 0){
+    if(response.data.length !== 0){
       setSeries((prev) => {
         const new_series: SerieType[] = prev.filter((serie) => serie.name !== organization.login);
-        return [...new_series, {name: organization.login, data: response}];
+        return [...new_series, {name: organization.login, data: response.data}];
+      });
+      setPredictions((prev) => {
+        const new_predictions = prev.filter((serie) => serie.name !== organization.login);
+        return [...new_predictions, {name: organization.login, data: response.forecast}];
       });
       setLoadingSeries(false);
     }
@@ -123,10 +134,14 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
   const getFirstCallOrganizationStarHistory = async () => {
     organizations.forEach( async (org) => {
       const response = await getOrganizationStarHistory(org.login);
-      if(response.length !== 0){
+      if(response.data.length !== 0){
         setSeries((prev) => {
           const new_series = prev.filter((serie) => serie.name !== org.login);
-          return [...new_series, {name: org.login, data: response}];
+          return [...new_series, {name: org.login, data: response.data}];
+        });
+        setPredictions((prev) => {
+          const new_series = prev.filter((serie) => serie.name !== org.login);
+          return [...new_series, {name: org.login, data: response.forecast}];
         });
       }
       count.current += 1;
@@ -146,7 +161,7 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
     ){
       getFirstCallOrganizationStarHistory();
     }
-  }, [organizations, getOrganizationStarHistory, loadingSeries, series])
+  }, [organizations, getFirstCallOrganizationStarHistory, loadingSeries, series])
 
   const clean = useCallback(() => {
     // Clean all organizations and remove hash
@@ -173,9 +188,11 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
         loading,
         organizations,
         dataFromHash,
-        series,
         loadingSeries,
+        series,
         filteredSeries,
+        predictions,
+        filteredPredictions,
         setLoading,
         reviewHash,
         addOrganization,

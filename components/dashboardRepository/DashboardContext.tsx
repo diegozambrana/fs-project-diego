@@ -25,6 +25,8 @@ export const DashboardRepositoryContext = createContext<DashboardRepoContextType
   dataFromHash: [],
   series: [],
   filteredSeries: [],
+  predictions: [],
+  filteredPredictions: [],
   loadingSeries: true,
   setLoading: () => {},
   addRepository: () => {},
@@ -43,6 +45,11 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   }, [hash]);
   const [loadingSeries, setLoadingSeries] = useState<boolean>(false);
   const [series, setSeries] = useState<SerieType[]>([]);
+  const [predictions, setPredictions] = useState<SerieType[]>([]);
+  const filteredPredictions = useMemo(() => {
+    const full_name_repositories = repositories.filter((repo) => repo.visible).map((repo) => repo.full_name);
+    return predictions.filter((prediction) => full_name_repositories.includes(prediction.name));
+  }, [predictions, repositories]);
   const filteredSeries = useMemo(() => {
     const full_name_repositories = repositories.filter((repo) => repo.visible).map((repo) => repo.full_name);
     return series.filter((serie) => full_name_repositories.includes(serie.name));
@@ -99,10 +106,14 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const getRepositoryHistory = async (repository: DashboardRepositoryType) => {
     setLoadingSeries(true);
     const response = await getRepositoryStarHistory(repository.owner, repository.name);
-    if(response.length !== 0){
+    if(response.data.length !== 0){
       setSeries((prev) => {
         const new_series = prev.filter((serie) => serie.name !== repository.full_name);
-        return [...new_series, {name: repository.full_name, data: response}];
+        return [...new_series, {name: repository.full_name, data: response.data}];
+      });
+      setPredictions((prev) => {
+        const new_predictions = prev.filter((serie) => serie.name !== repository.full_name);
+        return [...new_predictions, {name: repository.full_name, data: response.forecast}];
       });
       setLoadingSeries(false);
     }
@@ -122,10 +133,14 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const getFirstCallRepositoryStarHistory = async () => {
     repositories.forEach( async (repo) => {
       const response = await getRepositoryStarHistory(repo.owner, repo.name);
-      if(response.length !== 0){
+      if(response.data.length !== 0){
         setSeries((prev) => {
           const new_series = prev.filter((serie) => serie.name !== repo.full_name);
-          return [...new_series, {name: repo.full_name, data: response}];
+          return [...new_series, {name: repo.full_name, data: response.data}];
+        });
+        setPredictions((prev) => {
+          const new_series = prev.filter((serie) => serie.name !== repo.full_name);
+          return [...new_series, {name: repo.full_name, data: response.forecast}];
         });
       }
       count.current += 1;
@@ -144,7 +159,7 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
     ){
       getFirstCallRepositoryStarHistory();
     }
-  }, [repositories, getRepositoryStarHistory, loadingSeries, series])
+  }, [repositories, getFirstCallRepositoryStarHistory, loadingSeries, series])
 
   const clean = useCallback(() => {
     // Clean all repositories and remove hash
@@ -171,9 +186,11 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
         loading,
         repositories,
         dataFromHash,
-        series,
         loadingSeries,
+        series,
         filteredSeries,
+        predictions,
+        filteredPredictions,
         setLoading,
         reviewHash,
         addRepository,

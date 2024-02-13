@@ -22,6 +22,7 @@ const Dashboard: FC = () => {
     toggleVisibility,
     series,
     filteredSeries,
+    filteredPredictions,
     loadingSeries,
   } = useContext(DashboardRepositoryContext);
 
@@ -115,7 +116,10 @@ const Dashboard: FC = () => {
               ? <div>Loading...</div>
               : (
                 <div ref={chartRef}>
-                  <TimeSerieChart series={filteredSeries} />
+                  <TimeSerieChart
+                    series={filteredSeries}
+                    predictions={filteredPredictions}
+                  />
                 </div>
               )
             }

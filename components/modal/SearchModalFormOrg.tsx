@@ -37,14 +37,11 @@ export default function SearchModalFormOrg({
   
   const onSubmit = async (value: any) => {
     const organizationName = value.organization.split('/').at(-1)
-    console.log(organizationName)
     
 
     // Fetch the organization to verify if exists and display the organization dashboard
     if(!isLoading){
       getOrganization(organizationName).then((res: any) => {
-        console.log('getOrganization')
-        console.log(res.data)
         addOrganization(res.data);
         onClose();
       }).catch((err: any) => {

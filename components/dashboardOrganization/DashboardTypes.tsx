@@ -16,6 +16,8 @@ export interface DashboardRepoContextType {
     dataFromHash: string[];
     series: SerieType[];
     filteredSeries: SerieType[];
+    predictions: SerieType[];
+    filteredPredictions: SerieType[];
     loadingSeries: boolean;
   
     setLoading: (loading: boolean) => void;
