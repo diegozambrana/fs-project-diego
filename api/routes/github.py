@@ -1,5 +1,8 @@
-from datetime import datetime
+import logging
+import sys
+
 from fastapi import APIRouter, HTTPException
+
 from api.utils.github import (
     get_repo_data,
     get_repo_stargazers_history,
@@ -7,10 +10,8 @@ from api.utils.github import (
     get_organization_data,
     get_organization_stargazers_history_complete,
 )
-from api.utils.hadlers import get_repo_format, get_organization_format
-
-import logging
-import sys
+from api.utils.handlers import get_repo_format, get_organization_format
+from api.utils.nixtla import forecast
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -118,7 +119,12 @@ def read_owner_repositories(name: str):
     
     data = get_organization_stargazers_history_complete(org.get('login'))
 
-    return data
+    predictions = forecast(data)
+
+    return {
+        'data': data,
+        'forecast': predictions
+    }
 
 
 @router.get("/{owner}/{repo_name}")
@@ -154,12 +160,12 @@ def read_stargazers(owner: str, repo_name: str):
     else:
         data = get_repo_stargazers_history(owner, repo_name, repo)
 
-    data.append({
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "count": repo['stargazers_count']
-    })
+    predictions = forecast(data)
 
     if repo is None:
         raise HTTPException(status_code=404, detail="Repository not found")
 
-    return data
+    return {
+        'data': data,
+        'forecast': predictions
+    }

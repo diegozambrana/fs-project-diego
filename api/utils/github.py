@@ -14,7 +14,7 @@ from .mongo import (
     insert_org_data_to_db,
     get_org_data_from_db,
 )
-from .hadlers import (
+from .handlers import (
     get_diff_stargazers_by_date,
     handle_repo_stargazers_history_complete
 )

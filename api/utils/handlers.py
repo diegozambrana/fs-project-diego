@@ -50,3 +50,17 @@ def get_diff_stargazers_by_date(list_dates):
         return date_list
     else:
         return []
+
+
+def fill_missing_rows(df_original):
+    """
+    fill the missing rows in the dataframe
+    some days are missing in the data, so the value are filled with the last value
+    """
+    df = df_original.copy()
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+    df = df.resample('D').ffill()
+    df = df.reset_index()
+
+    return df
