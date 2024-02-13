@@ -1,4 +1,4 @@
-import { getCookie, setCookie, removeCookie } from 'typescript-cookie';
+// import { getCookie, setCookie, removeCookie } from 'typescript-cookie';
 
 const PREFIX = 'nxt__star_history__';
 
@@ -12,11 +12,11 @@ const PREFIX = 'nxt__star_history__';
 *    data: [ { date: '2021-08-01', count: 1000 }, ... ]
 * }
 */
-export const useCookiesForStarData = () => {
+export const useLocalStorageForStarData = () => {
   const verify = (key: string) => {
     // Check if the data is already stored and if the date is the same
-    let data: string | undefined = getCookie(PREFIX + key);
-    if (data === undefined) {
+    let data: string | null = localStorage.getItem(PREFIX + key);
+    if (data === null) {
       return false;
     }
     const dataParsed = JSON.parse(data);
@@ -30,9 +30,9 @@ export const useCookiesForStarData = () => {
 
   const getStarData = (key: string) => {
     // Get the data from the cookie
-    const data = getCookie(PREFIX + key)
-    if (data === undefined) {
-      return undefined;
+    const data = localStorage.getItem(PREFIX + key)
+    if (data === null) {
+      return null;
     }
     return JSON.parse(data)['data'];
   };
@@ -41,11 +41,11 @@ export const useCookiesForStarData = () => {
     // Set the data in the cookie
     const currentDate = new Date().toISOString().split('T')[0];
     const data = { date: currentDate, data: value };
-    setCookie(PREFIX + key, JSON.stringify(data))
+    localStorage.setItem(PREFIX + key, JSON.stringify(data))
   };
   
   // Remove the data from the cookie
-  const removeStarData = (key: string) => removeCookie(PREFIX + key);
+  const removeStarData = (key: string) => localStorage.removeItem(PREFIX + key);
 
   return { getStarData, setStarData, removeStarData, verify};
 };

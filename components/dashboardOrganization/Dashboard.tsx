@@ -115,7 +115,7 @@ const Dashboard: FC = () => {
               ? <div>Loading...</div>
               : (
                 <div ref={chartRef}>
-                  {/* <TimeSerieChart series={filteredSeries} /> */}
+                  <TimeSerieChart series={filteredSeries} />
                 </div>
               )
             }

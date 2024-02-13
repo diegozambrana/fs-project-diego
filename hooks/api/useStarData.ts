@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useCookiesForStarData } from '../store/useCookiesForStarData';
+import { useLocalStorageForStarData } from '../store/useLocalStorage';
 
 export const useRepositoryStarHistory = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const {getStarData, setStarData, verify} = useCookiesForStarData();
+  const {getStarData, setStarData, verify} = useLocalStorageForStarData();
 
   /* 
   * Get the star history of a repository by the API,
