@@ -1,5 +1,4 @@
-import { Box, Card } from "@mantine/core";
-import Help from "@/components/ui/Help";
+import { Card } from "@mantine/core";
 import { DashboardRepository } from "@/components/dashboardRepository";
 
 

@@ -86,6 +86,21 @@ def read_organization(query: str):
     }
     return data
 
+@router.get("/org/{name}")
+def read_owner_repositories(name: str):
+    """
+    Get repositories by owner
+    """
+    if name is None:
+        raise HTTPException(status_code=404, detail="organization not found")
+
+    org = get_organization_data(name)
+
+    if org is None:
+        raise HTTPException(status_code=404, detail="organization not found")
+
+    return get_organization_format(org)
+
 
 @router.get("/{owner}/{repo_name}")
 async def read_repository(owner: str, repo_name: str):
@@ -126,17 +141,3 @@ def read_stargazers(owner: str, repo_name: str):
     return data
 
 
-@router.get("/org/{name}")
-def read_owner_repositories(name: str):
-    """
-    Get repositories by owner
-    """
-    if name is None:
-        raise HTTPException(status_code=404, detail="organization not found")
-
-    org = get_organization_data(name)
-
-    if org is None:
-        raise HTTPException(status_code=404, detail="organization not found")
-
-    return get_organization_format(org)
