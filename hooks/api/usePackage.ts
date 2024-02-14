@@ -9,7 +9,7 @@ export const usePackage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {getStarData, setStarData, verify} = useLocalStorageForStarData();
 
-  // get repository by owner and repo_name
+  // get package by package name
   const getPackage = async ( packageName: string) => {
     setIsLoading(true);
     const key = `${packageName}___package`;
@@ -36,7 +36,7 @@ export const usePackage = () => {
     return response.data;
   }
 
-  // get repositories by a list of dictionary owner and repo_name
+  // get packages by a list of package names
   const getPackages = async (data: string[]) => {
     setIsLoading(true);
     const query = data.join(',');
