@@ -6,6 +6,7 @@ import Link from 'next/link';
 const links = [
   {label: 'Repositories', path: '/compareRepo'},
   {label: 'Organizations', path: '/compareOrg'},
+  {label: 'Package Downloads', path: '/compareDownloads'},
 ];
 
 export default function Nav() {

@@ -74,7 +74,7 @@ export default function SearchModalFormOrg({
         </Box>
         <Box ta="right">
           <Button mr="1rem" color="gray" onClick={onClose}>Cancel</Button>
-          <Button type="submit">Search</Button>
+          <Button type="submit" disabled={isLoading}>{isLoading ? 'Searching' : 'Search'}</Button>
         </Box>
       </form>
     </Box>

@@ -2,16 +2,17 @@
 
 import { Button, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import SearchModalForm from './SearchModalForm';
 import { IconPlus } from "@tabler/icons-react";
+import SearchModalFormPackage from './SearchModalFormPackage';
 
-export default function AddNew(){
+
+export default function AddNewPackage(){
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
       <Modal opened={opened} onClose={close} title="Add new Github url">
-        <SearchModalForm
+        <SearchModalFormPackage
           onClose={close}
         />
       </Modal>

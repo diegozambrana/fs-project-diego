@@ -9,7 +9,6 @@ import { DashboardRepositoryContext } from "../dashboardRepository/DashboardCont
 
 interface SearchModalFormProps {
   onClose: () => void;
-  typeData: "repo" | "org";
 }
 
 /* 
@@ -18,7 +17,6 @@ interface SearchModalFormProps {
 */
 export default function SearchModalForm({
   onClose,
-  typeData,
 }: SearchModalFormProps) {
   const { getRepository, isLoading } = useRepository();
   const { addRepository } = useContext(DashboardRepositoryContext)
@@ -30,18 +28,10 @@ export default function SearchModalForm({
       repository: (value: string) => value.length === 0
         ? "This field is required"
         : value.length <= 3 ? "This field is too short"
-        : typeData === 'repo' && !validateGitHubRepo(value) ? "Invalid data"
-        : typeData === 'org' && !validateGitHubOrg(value) ? "Invalid data"
+        : !validateGitHubRepo(value) ? "Invalid data"
         : null
     },
   });
-
-  const placeholder_text = typeData === "repo"
-    ? `"facebook/react" or "https://github.com/facebook/react"`
-    : `"facebook" or "https://github.com/facebook"`;
-
-  const label = typeData === "repo" ? "Repository" : "Organization";
-  
   
   const onSubmit = async (values: any) => {
     const repoSplit = values.repository.split("/")
@@ -65,40 +55,25 @@ export default function SearchModalForm({
 
   return (
     <Box>
-      {typeData === "repo" && (
-        <>
-          <Text my="1rem">
-            Copy the URL of the github repository or the owner and repository name.
-          </Text> 
-          <Text my="1rem" size="sm">
-            <strong>Example: </strong><br />
-            &quot;`facebook/react&quot;` or &quot;`https://github.com/facebook/react&quot;`
-          </Text>
-        </>
-      )}
-      {typeData === "org" && (
-        <>
-          <Text my="1rem">
-            Copy the URL of the github account or the owner name.
-          </Text> 
-          <Text my="1rem" size="sm">
-            <strong>Example: </strong><br />
-            `&quot;`facebook`&quot;` or `&quot;`https://github.com/facebook`&quot;`
-          </Text>
-        </>
-      )}
+      <Text my="1rem">
+        Copy the URL of the github repository or the owner and repository name.
+      </Text> 
+      <Text my="1rem" size="sm">
+        <strong>Example: </strong><br />
+        &quot;facebook/react&quot; or &quot;https://github.com/facebook/react&quot;
+      </Text>
       <form onSubmit={
         form.onSubmit(onSubmit)}>
         <Box my="1rem">
           <TextInput
-            label={label}
-            placeholder={placeholder_text}
+            label={'Repository'}
+            placeholder={`"facebook/react" or "https://github.com/facebook/react"`}
             {...form.getInputProps('repository')}
           />
         </Box>
         <Box ta="right">
           <Button mr="1rem" color="gray" onClick={onClose}>Cancel</Button>
-          <Button type="submit">Search</Button>
+          <Button type="submit" disabled={isLoading}>{isLoading ? 'Searching' : 'Search'}</Button>
         </Box>
       </form>
     </Box>

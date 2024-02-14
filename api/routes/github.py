@@ -61,8 +61,6 @@ def read_organization(query: str):
     """
     Get organization by list of organization names
     """
-    logger.info('read_organization!!!!')
-    logger.info(query)
     if query is None:
         raise HTTPException(status_code=404, detail="organizations not found")
     
