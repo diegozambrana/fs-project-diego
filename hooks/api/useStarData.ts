@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useLocalStorageForStarData } from '../store/useLocalStorage';
+import { API_DOMAIN } from '@/utils/constants';
 
 export const useRepositoryStarHistory = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ export const useRepositoryStarHistory = () => {
       setIsLoading(false);
       return getStarData(key);
     }
-    const response = await axios.get(`/api/github/${owner}/${repo_name}/stargazers`).finally(() => {
+    const response = await axios.get(`${API_DOMAIN}/api/github/${owner}/${repo_name}/stargazers`).finally(() => {
       setIsLoading(false);
     });
     setStarData(key, response.data);
