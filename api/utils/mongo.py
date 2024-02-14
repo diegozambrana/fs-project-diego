@@ -94,3 +94,31 @@ def get_org_data_from_db(org):
     data = collection.find_one({'name': org['login']})
     client.close()
     return data
+
+
+def get_pystats_data_from_db(package_name):
+    """
+    Get python package data from MongoDB
+    """
+    client = MongoClient(MONGODB_ACCESS_URL)
+    db = client.trackerDB
+    collection = db.pythonPackagesDataHistory
+    data = collection.find_one({'package_name': package_name})
+    client.close()
+    return data
+
+
+def insert_pystats_data_to_db(package_name, data):
+    """
+    Insert python package data to MongoDB
+    """
+    client = MongoClient(MONGODB_ACCESS_URL)
+    db = client.trackerDB
+    collection = db.pythonPackagesDataHistory
+    collection.insert_one({
+        'package_name': package_name,
+        'created_at': datetime.now().isoformat(),
+        'updated_at': datetime.now().isoformat(),
+        'data': data
+    })
+    client.close()
