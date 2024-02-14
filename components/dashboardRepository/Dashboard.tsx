@@ -185,9 +185,7 @@ const Dashboard: FC = () => {
             <Box>
               <Flex justify="space-between">
                 <CleanRepo />
-                <AddNew
-                  typeData="repo"
-                />
+                <AddNew/>
               </Flex>
             </Box>
             
