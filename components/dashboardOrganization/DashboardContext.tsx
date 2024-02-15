@@ -61,7 +61,9 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
 
   useEffect(() => {
     setHash(window.location.hash);
-    setLoading(false);
+    if(!window.location.hash){
+      setLoading(false);
+    }
   }, []);
 
   const updateHasByNewOrg = (organization: DashboardOrganizationType) => {
@@ -127,6 +129,9 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
         setOrganizations(
           response['success'].map((d: any) => ({...d, visible: true}))
         );
+        if(loading){
+          setLoading(false);
+        }
       });
     }
   }, [dataFromHash, getOrganizations, organizations]);

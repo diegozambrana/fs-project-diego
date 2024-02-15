@@ -3,7 +3,7 @@ import { FC, useState, useContext, useCallback, useRef } from "react";
 import { Grid, GridCol, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
 import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
-import Help from "@/components/ui/Help";
+
 
 import AddNewOrg from "@/components/modal/AddNewOrg";
 import CleanOrg from "@/components/modal/CleanOrg";
@@ -11,6 +11,7 @@ import { DashboardOrganizationContext } from "./DashboardContext";
 import { TimeSerieChart } from "../charts/TimeSerieChart";
 import { generateCSVDataFromSeries } from "@/utils/csv";
 import { toPng } from 'html-to-image';
+import { Loading } from "../ui/Loading";
 
 
 const Dashboard: FC = () => {
@@ -77,9 +78,6 @@ const Dashboard: FC = () => {
 
   return (
     <Box>
-      <Box ta="right">
-        <Help content={"Help Text"}/>
-      </Box>
       <Flex
         mih={50}
         gap="md"
@@ -113,7 +111,7 @@ const Dashboard: FC = () => {
         <GridCol span={8}>
           <div>
             {loadingSeries
-              ? <div>Loading...</div>
+              ? <Loading height="18rem" />
               : (
                 <div ref={chartRef}>
                   <TimeSerieChart

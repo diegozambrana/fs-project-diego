@@ -2,13 +2,14 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useLocalStorageForStarData } from '../store/useLocalStorage';
 import { notifications } from '@mantine/notifications';
+import { API_DOMAIN } from '@/utils/constants';
 
 
 export const usePackage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {getStarData, setStarData, verify} = useLocalStorageForStarData();
 
-  // get repository by owner and repo_name
+  // get package by package name
   const getPackage = async ( packageName: string) => {
     setIsLoading(true);
     const key = `${packageName}___package`;
@@ -18,7 +19,7 @@ export const usePackage = () => {
     }
     let response
     try{
-      response = await axios.get(`/api/py/${packageName}`).finally(() => {
+      response = await axios.get(`${API_DOMAIN}/api/py/${packageName}`).finally(() => {
         setIsLoading(false);
       });
     }catch(err){
@@ -35,11 +36,11 @@ export const usePackage = () => {
     return response.data;
   }
 
-  // get repositories by a list of dictionary owner and repo_name
+  // get packages by a list of package names
   const getPackages = async (data: string[]) => {
     setIsLoading(true);
     const query = data.join(',');
-    return axios.get(`/api/py/packages?query=${query}`)
+    return axios.get(`${API_DOMAIN}/api/py/packages?query=${query}`)
       .then((response: any) => {
         return response.data; 
       }).finally(() => {

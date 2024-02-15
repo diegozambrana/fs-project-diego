@@ -60,7 +60,9 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
 
   useEffect(() => {
     setHash(window.location.hash);
-    setLoading(false);
+    if(!window.location.hash){
+      setLoading(false);
+    }
   }, []);
 
   const updateHasByNewRepo = (repository: DashboardRepositoryType) => {
@@ -126,6 +128,9 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
         setRepositories(
           response['success'].map((d: any) => ({...d, visible: true}))
         );
+        if(loading){
+          setLoading(false);
+        }
       });
     }
   }, [dataFromHash, getRepositories, repositories]);

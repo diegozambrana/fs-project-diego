@@ -55,11 +55,12 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
     return series.filter((serie) => full_name_packages.includes(serie.name));
   }, [series, packages]);
   const { getPackages } = usePackage();
-  const count = useRef(0);
 
   useEffect(() => {
     setHash(window.location.hash);
-    setLoading(false);
+    if(!window.location.hash){
+      setLoading(false);
+    }
   }, []);
 
   const updateHasByNewRepo = (package_item: DashboardPackageType) => {
@@ -136,13 +137,14 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
           setSeries(new_series);
           setPredictions(new_predictions);
           setPackages(new_packages);
-        // });
+          if(loading){
+            setLoading(false);
+          }
       });
     }
   }, [dataFromHash, packages, getPackages])
 
   const clean = useCallback(() => {
-
     setHash("");
     setPackages([]);
     setSeries([]);

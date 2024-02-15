@@ -36,7 +36,7 @@ export default function RootLayout({
         <MantineProvider theme={theme}>
           <Notifications />
           <Header />
-          <Container size="md">
+          <Container size="lg">
             <Grid>
               <GridCol span={12}>
                 {children}

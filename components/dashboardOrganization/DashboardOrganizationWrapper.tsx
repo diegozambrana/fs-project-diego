@@ -4,17 +4,23 @@ import Dashboard from "./Dashboard";
 import { DashboardOrganizationContext } from "./DashboardContext";
 import { Box, Text } from "@mantine/core";
 import SearchModal from "../modal/SearchModal";
+import Help from "../ui/Help";
+import { OrganizationHelp } from "../helps/OrganizationHelp";
+import { Loading } from "../ui/Loading";
 
 export const DashboardOrganizationWrapper: FC = () => {
   const {hash, loading} = useContext(DashboardOrganizationContext);
 
   if(loading){
-    return <p>Loading...</p>
+    return <Loading height="18rem"/>
   }
 
   if(!hash){
     return (
       <>
+        <Box ta="right">
+          <Help content={<OrganizationHelp />}/>
+        </Box>
         <Text my="1rem" ta="center">
           You must to search a Organization to compare.
         </Text>

@@ -1,3 +1,4 @@
+import { API_DOMAIN } from '@/utils/constants';
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -7,7 +8,7 @@ export const useRepository = () => {
   // get repository by owner and repo_name
   const getRepository = async (owner: string, repo_name: string) => {
     setIsLoading(true);
-    return axios.get(`/api/github/${owner}/${repo_name}`).finally(() => {
+    return axios.get(`${API_DOMAIN}/api/github/${owner}/${repo_name}`).finally(() => {
       setIsLoading(false);
     });
   }
@@ -16,7 +17,7 @@ export const useRepository = () => {
   const getRepositories = async (data: {owner: string, name: string}[]) => {
     setIsLoading(true);
     const query = data.map((d) => `${d.owner}/${d.name}`).join(',');
-    return axios.get(`/api/github/get_repositories?query=${query}`)
+    return axios.get(`${API_DOMAIN}/api/github/get_repositories?query=${query}`)
       .then((response: any) => {
         return response.data; 
       }).finally(() => {

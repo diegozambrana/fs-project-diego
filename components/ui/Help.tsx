@@ -8,8 +8,8 @@ export default function Help({content}: {content: React.ReactNode}){
     const [opened, { open, close }] = useDisclosure(false);
     return (
       <Box>
-        <Modal opened={opened} onClose={close} title="Help">
-          <Box>
+        <Modal opened={opened} onClose={close} size="lg">
+          <Box mb="1rem">
             {content}
           </Box>
           <Box ta="right">
