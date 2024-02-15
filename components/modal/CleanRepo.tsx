@@ -20,7 +20,7 @@ export default function CleanRepo() {
   return (
     <>
       <Modal opened={opened} onClose={close} title="Add new Github url">
-        <Text>Do you want to clean the dashboard?</Text>
+        <Text>Do you want to clean the Repository dashboard?</Text>
         <Box ta="right" mt="1rem">
           <Button mr="1rem" color="gray" onClick={close}>Cancel</Button>
           <Button color='red' variant='filled' onClick={onClean}>Clean</Button>

@@ -26,7 +26,6 @@ export interface DashboardPackageContextType {
     setLoading: (loading: boolean) => void;
     addPackage: (packageItem: DashboardPackageResponseType) => void;
     removePackage: (packageItem: DashboardPackageType) => void;
-    reviewHash: () => void;
     clean: () => void;
     toggleVisibility: (packageItem: DashboardPackageType) => void;
 }

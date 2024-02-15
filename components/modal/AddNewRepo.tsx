@@ -10,7 +10,7 @@ export default function AddNew(){
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Add new Github url">
+      <Modal opened={opened} onClose={close} title="Add new Repository">
         <SearchModalForm
           onClose={close}
         />
@@ -22,7 +22,7 @@ export default function AddNew(){
         variant="filled"
         leftSection={<IconPlus size={14} />}
         onClick={open}
-      >Add New</Button>
+      >Add Repository</Button>
     </>
   )
 }

@@ -34,10 +34,26 @@ create a new file `.env` in the root directory copy and replace the values of `G
 GITHUB_ACCESS_TOKEN=<GITHUB_ACCESS_TOKEN>
 MONGODB_ACCESS_URL=mongodb+srv://nixtla:prfCYFJscmVwn3Fp@clusternixtlatracker.jyov12n.mongodb.net/trackerDB?retryWrites=true&w=majority
 NIXTLA_API_KEY=<NIXTLA_API_KEY>
+NEXT_PUBLIC_API_DOMAIN=<API_DOMAIN>
+API_DOMAIN=<API_DOMAIN>
 ```
 
-## Deploy on Vercel
+## Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### FastAPI
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The backend service that provide the data from Github and Pystats. The service use MongoDB as cache, some requests take too time so the data will be stored in mongoDB. 
+
+To review the API you can access to `/docs` url path.
+
+## NextJS and React
+
+The frontend side is made with NextJs and ReactJS, the pages are provided by NextJS the different views are teh following:
+
+* `/compareRepo`: Dashboard to display the stargazers data history from a GitHub Repository.
+* `/compareOrg`: Dashboard to display the stargazers data history from a GitHub Organization.
+* `/compareDownloads`: Dashboard to display the Package Download data history from a GitHub Repository.
+
+## Deployment
+
+The NextJS application is hosted by Vercel and the FastAPI service is served in a EC2 AWS instance.

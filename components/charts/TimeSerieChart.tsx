@@ -9,8 +9,8 @@ import {
 } from '@visx/xychart';
 import { FC } from 'react';
 
-import { LegendOrdinal, LegendThreshold } from '@visx/legend';
-import { scaleOrdinal, scaleThreshold } from '@visx/scale';
+import { LegendOrdinal } from '@visx/legend';
+import { scaleOrdinal } from '@visx/scale';
 import { Loading } from '../ui/Loading';
 import { COLORS, COLORS_FORECAST } from '@/utils/constants';
 
@@ -40,9 +40,7 @@ export const TimeSerieChart: FC<TimeSerieChartType> = ({series, predictions}) =>
     domain: series.map((s) => s['name']),
     range: COLORS.slice(0, series.length),
   });
-  
 
-  // TODO: Add a loading state and legends
   return (
     <div style={{position: 'relative'}}>
       <XYChart height={400} xScale={{ type: "time" }} yScale={{ type: "linear" }}>

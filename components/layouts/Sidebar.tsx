@@ -1,6 +1,5 @@
 import { Card, Title, List, ListItem } from "@mantine/core";
 
-
 export default function Sidebar() {
   return (
     <Card shadow="sm" padding="md" radius="md">

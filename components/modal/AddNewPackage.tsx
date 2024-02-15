@@ -11,7 +11,7 @@ export default function AddNewPackage(){
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Add new Github url">
+      <Modal opened={opened} onClose={close} title="Add new Package">
         <SearchModalFormPackage
           onClose={close}
         />
@@ -23,7 +23,7 @@ export default function AddNewPackage(){
         variant="filled"
         leftSection={<IconPlus size={14} />}
         onClick={open}
-      >Add New</Button>
+      >Add Package</Button>
     </>
   )
 }

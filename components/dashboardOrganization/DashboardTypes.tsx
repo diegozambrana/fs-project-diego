@@ -25,7 +25,6 @@ export interface DashboardRepoContextType {
     setLoading: (loading: boolean) => void;
     addOrganization: (organization: DashboardOrganizationType) => void;
     removeOrganization: (organization: DashboardOrganizationType) => void;
-    reviewHash: () => void;
     clean: () => void;
     toggleVisibility: (organization: DashboardOrganizationType) => void;
 }

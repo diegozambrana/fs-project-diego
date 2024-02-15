@@ -1,5 +1,5 @@
 'use client';
-import { Autocomplete, Group, Burger, rem } from '@mantine/core';
+import { Group } from '@mantine/core';
 import classes from './Nav.module.css';
 import Link from 'next/link';
 

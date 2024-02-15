@@ -33,7 +33,6 @@ export const DashboardOrganizationContext = createContext<DashboardRepoContextTy
   setLoading: () => {},
   addOrganization: () => {},
   removeOrganization: () => {},
-  reviewHash: () => {},
   clean: () => {},
   toggleVisibility: () => {},
 });
@@ -108,10 +107,6 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
     setHash(new_hash);
     setOrganizations(organizations.filter((org) => org.login !== organization.login));
   };
-
-  const reviewHash = () => {
-    setHash(window.location.hash);
-  }
 
   const getOrganizationHistory = async (organization: DashboardOrganizationType) => {
     setLoadingSeries(true);
@@ -208,7 +203,6 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
         segmentFilter,
         setSegmentFilter,
         setLoading,
-        reviewHash,
         addOrganization,
         removeOrganization,
         clean,

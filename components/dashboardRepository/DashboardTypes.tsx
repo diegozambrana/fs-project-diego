@@ -29,7 +29,6 @@ export interface DashboardRepoContextType {
     setLoading: (loading: boolean) => void;
     addRepository: (repository: DashboardRepositoryType) => void;
     removeRepository: (repository: DashboardRepositoryType) => void;
-    reviewHash: () => void;
     clean: () => void;
     toggleVisibility: (repository: DashboardRepositoryType) => void;
 }

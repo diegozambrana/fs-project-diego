@@ -6,7 +6,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState
 } from "react";
 import {
@@ -31,7 +30,6 @@ export const DashboardPackagesContext = createContext<DashboardPackageContextTyp
   setLoading: () => {},
   addPackage: () => {},
   removePackage: () => {},
-  reviewHash: () => {},
   clean: () => {},
   toggleVisibility: () => {},
 });
@@ -46,6 +44,7 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
   const [loadingSeries, setLoadingSeries] = useState<boolean>(false);
   const [series, setSeries] = useState<SerieType[]>([]);
   const [predictions, setPredictions] = useState<SerieType[]>([]);
+
   const filteredPredictions = useMemo(() => {
     const full_name_packages = packages.filter((pack) => pack.visible).map((pack) => pack.name);
     return predictions.filter((prediction) => full_name_packages.includes(prediction.name));
@@ -54,6 +53,7 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
     const full_name_packages = packages.filter((pack) => pack.visible).map((pack) => pack.name);
     return series.filter((serie) => full_name_packages.includes(serie.name));
   }, [series, packages]);
+  
   const { getPackages } = usePackage();
 
   useEffect(() => {
@@ -120,10 +120,6 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
     setPredictions(new_predictions);
   };
 
-  const reviewHash = () => {
-    setHash(window.location.hash);
-  }
-
   useEffect(() => {
     if (dataFromHash.length > 0 && packages.length === 0) {
       getPackages(dataFromHash).then((response: any) => {
@@ -175,7 +171,6 @@ export const DashboardPackagesProvider: FC<DashboardPackagesProviderProps> = ({c
         predictions,
         filteredPredictions,
         setLoading,
-        reviewHash,
         addPackage,
         removePackage,
         clean,

@@ -11,7 +11,7 @@ export default function AddNewOrg(){
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Add new Github url">
+      <Modal opened={opened} onClose={close} title="Add new Organization">
         <SearchModalFormOrg
           onClose={close}
         />
@@ -23,7 +23,7 @@ export default function AddNewOrg(){
         variant="filled"
         leftSection={<IconPlus size={14} />}
         onClick={open}
-      >Add New</Button>
+      >Add Organization</Button>
     </>
   )
 }
