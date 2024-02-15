@@ -28,6 +28,8 @@ export const DashboardOrganizationContext = createContext<DashboardRepoContextTy
   predictions: [],
   filteredPredictions: [],
   loadingSeries: true,
+  segmentFilter: 'all',
+  setSegmentFilter: () => {},
   setLoading: () => {},
   addOrganization: () => {},
   removeOrganization: () => {},
@@ -38,6 +40,7 @@ export const DashboardOrganizationContext = createContext<DashboardRepoContextTy
 
 export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProps> = ({children}) => {
   const [hash, setHash] = useState<string | null>(null);
+  const [segmentFilter, setSegmentFilter] = useState<string>('all')
   const [loading, setLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<DashboardOrganizationType[]>([]);
   const dataFromHash = useMemo(() => {
@@ -52,8 +55,12 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
   }, [predictions, organizations]);
   const filteredSeries = useMemo(() => {
     const full_name_repositories = organizations.filter((org) => org.visible).map((org) => org.login);
-    return series.filter((serie) => full_name_repositories.includes(serie.name));
-  }, [series, organizations]);
+    let filtered_data = series.filter((serie) => full_name_repositories.includes(serie.name))
+    if(segmentFilter !== 'all'){
+      filtered_data = filtered_data.map((serie) => ({...serie, data: serie.data.slice(-parseInt(segmentFilter))}))
+    }
+    return filtered_data;
+  }, [series, organizations, segmentFilter]);
 
   const { getOrganizations } = useOrganization();
   const { getOrganizationStarHistory } = useStarDataOrg();
@@ -198,6 +205,8 @@ export const DashboardOrganizationProvider: FC<DashboardOrganizationProviderProp
         filteredSeries,
         predictions,
         filteredPredictions,
+        segmentFilter,
+        setSegmentFilter,
         setLoading,
         reviewHash,
         addOrganization,

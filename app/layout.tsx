@@ -41,9 +41,6 @@ export default function RootLayout({
               <GridCol span={12}>
                 {children}
               </GridCol>
-              <GridCol span={12}>
-                <Sidebar />
-              </GridCol>
             </Grid>
           </Container>
         </MantineProvider>

@@ -1,6 +1,6 @@
 'use client';
 import { FC, useState, useContext, useCallback, useRef } from "react";
-import { Grid, GridCol, Box, Button, Flex, Switch } from "@mantine/core";
+import { Grid, GridCol, Box, Button, Flex, SegmentedControl } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
 import { IconDownload, IconPhoto, IconLink } from "@tabler/icons-react";
 
@@ -12,10 +12,10 @@ import { generateCSVDataFromSeries } from "@/utils/csv";
 import { toPng } from 'html-to-image';
 import { Loading } from "../ui/Loading";
 import { DashboardElement } from "../dashboard/DashboardElement";
+import { SEGMENT_VALUES } from "@/utils/constants";
 
 
 const Dashboard: FC = () => {
-  const [ checked, setChecked ] = useState(false);
   const [ copied, setCopied ] = useState(false);
   const {
     repositories,
@@ -25,6 +25,8 @@ const Dashboard: FC = () => {
     filteredSeries,
     filteredPredictions,
     loadingSeries,
+    segmentFilter,
+    setSegmentFilter
   } = useContext(DashboardRepositoryContext);
 
   const chartRef = useRef<HTMLDivElement>(null)
@@ -126,10 +128,10 @@ const Dashboard: FC = () => {
         <GridCol span={4}>
           <Box>
             <Box my="1rem">
-              <Switch
-                label="Align Timeline"
-                checked={checked}
-                onChange={(event) => setChecked(event.currentTarget.checked)}
+              <SegmentedControl
+                value={segmentFilter}
+                onChange={setSegmentFilter}
+                data={SEGMENT_VALUES}
               />
             </Box>
 

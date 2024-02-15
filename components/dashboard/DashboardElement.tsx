@@ -30,7 +30,12 @@ export const DashboardElement: FC<DashboardElementType> = ({
       <Flex justify="space-between">
         {element?.avatar_url && (
           <Box>
-            <Image src={element.avatar_url} h="1.5rem" radius="md" />
+            <Image
+              src={element.avatar_url}
+              h="1.5rem"
+              radius="md"
+              alt={element.name}
+            />
           </Box>
         )}
         <Box>

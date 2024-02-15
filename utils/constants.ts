@@ -14,3 +14,9 @@ export const COLORS_FORECAST = [
     "#E8590C", "#D9480F", "#FFE066", "#FCC419", "#FAB005", "#F08C00", "#E67700",
     "#FFC078", "#FFA94D", "#FF922B", "#FD7E14", "#F76707", "#E8590C", "#D9480F",
 ]
+
+export const SEGMENT_VALUES = [
+    {label: 'all Days', value: 'all'},
+    {label: '90 Days', value: '90'},
+    {label: '180 Days', value: '180'},
+]

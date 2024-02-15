@@ -28,6 +28,8 @@ export const DashboardRepositoryContext = createContext<DashboardRepoContextType
   predictions: [],
   filteredPredictions: [],
   loadingSeries: true,
+  segmentFilter: 'all',
+  setSegmentFilter: () => {},
   setLoading: () => {},
   addRepository: () => {},
   removeRepository: () => {},
@@ -40,6 +42,7 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   const [hash, setHash] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [repositories, setRepositories] = useState<DashboardRepositoryType[]>([]);
+  const [segmentFilter, setSegmentFilter] = useState<string>('all')
   const dataFromHash = useMemo(() => {
     return decodeHash(hash);
   }, [hash]);
@@ -52,8 +55,12 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
   }, [predictions, repositories]);
   const filteredSeries = useMemo(() => {
     const full_name_repositories = repositories.filter((repo) => repo.visible).map((repo) => repo.full_name);
-    return series.filter((serie) => full_name_repositories.includes(serie.name));
-  }, [series, repositories]);
+    let filtered_data = series.filter((serie) => full_name_repositories.includes(serie.name));
+    if(segmentFilter !== 'all'){
+      filtered_data = filtered_data.map((serie) => ({...serie, data: serie.data.slice(-parseInt(segmentFilter))}))
+    }
+    return filtered_data;
+  }, [series, repositories, segmentFilter]);
   const { getRepositories } = useRepository();
   const { getRepositoryStarHistory } = useRepositoryStarHistory();
   const count = useRef(0);
@@ -196,6 +203,8 @@ export const DashboardRepositoryProvider: FC<DashboardRepositoryProviderProps> =
         filteredSeries,
         predictions,
         filteredPredictions,
+        segmentFilter,
+        setSegmentFilter,
         setLoading,
         reviewHash,
         addRepository,

@@ -19,6 +19,8 @@ export interface DashboardRepoContextType {
     predictions: SerieType[];
     filteredPredictions: SerieType[];
     loadingSeries: boolean;
+    segmentFilter: string;
+    setSegmentFilter: (s: string) => void;
   
     setLoading: (loading: boolean) => void;
     addOrganization: (organization: DashboardOrganizationType) => void;
