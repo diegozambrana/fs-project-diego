@@ -1,8 +1,8 @@
 'use client';
 import { FC, useState, useContext, useCallback, useRef } from "react";
-import { Grid, GridCol, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
+import { Grid, GridCol, Box, Button, Flex, Switch } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
-import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
+import { IconDownload, IconPhoto, IconLink } from "@tabler/icons-react";
 
 import { DashboardPackagesContext } from "./DashboardContext";
 import { TimeSerieChart } from "../charts/TimeSerieChart";
@@ -11,6 +11,7 @@ import { toPng } from 'html-to-image';
 import AddNewPackage from "../modal/AddNewPackage";
 import CleanPackage from "../modal/CleanPackage";
 import { Loading } from "../ui/Loading";
+import { DashboardElement } from "../dashboard/DashboardElement";
 
 
 const Dashboard: FC = () => {
@@ -131,52 +132,14 @@ const Dashboard: FC = () => {
                 onChange={(event) => setChecked(event.currentTarget.checked)}
               />
             </Box>
+
             {packages.map((pack, index) => (
-              <Box
-                p="0.5rem"
-                mb="0.5rem"
-                key={`pack-${pack.name}`}
-                style={{border: '1px solid #e1e1e1', borderRadius: '5px'}}
-              >
-                <Flex justify="space-between">
-                  <Box>
-                    {pack.name}
-                  </Box>
-                  <Box>
-                    <a href={pack.html_url} target="_blank" rel="noreferrer">
-                      <ActionIcon
-                        mr="0.2rem"
-                        variant="default"
-                        radius="xl"
-                        aria-label="Settings"
-                      >
-                        <IconExternalLink style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      </ActionIcon>
-                    </a>
-                    <ActionIcon
-                      mr="0.2rem"
-                      variant="default"
-                      radius="xl"
-                      aria-label="Settings"
-                      onClick={() => toggleVisibility(pack)}
-                    >
-                      {pack.visible ? (
-                        <IconEye style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      ) : (
-                        <IconEyeOff style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      )}
-                    </ActionIcon>
-                    <ActionIcon
-                      variant="default"
-                      radius="xl"
-                      aria-label="Settings"
-                      onClick={() => removePackage(pack)}
-                    >
-                      <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                    </ActionIcon>
-                  </Box>
-                </Flex>
-              </Box>
+              <DashboardElement
+                key={pack.name}
+                element={pack}
+                onToggleVisibility={toggleVisibility}
+                onRemove={removePackage}
+              />
             ))}
 
             <Box>

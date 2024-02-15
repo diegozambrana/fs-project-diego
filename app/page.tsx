@@ -24,6 +24,13 @@ export default function Home() {
         <Box mt="1rem">
           <Link href="/compareOrg">Dashboard to compare organizations</Link>
         </Box>
+        <Text mt="1rem">
+          If you want to search download data history from an package need
+          to redirect to the search Download Package Dashboard.
+        </Text>
+        <Box mt="1rem">
+          <Link href="/compareDownloads">Dashboard to compare Downloads Data</Link>
+        </Box>
       </Card>
     </main>
   );
