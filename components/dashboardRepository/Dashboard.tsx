@@ -1,8 +1,8 @@
 'use client';
 import { FC, useState, useContext, useCallback, useRef } from "react";
-import { Grid, GridCol, Box, ActionIcon, Button, Flex, Switch } from "@mantine/core";
+import { Grid, GridCol, Box, Button, Flex, Switch } from "@mantine/core";
 import { notifications } from '@mantine/notifications';
-import { IconEyeOff, IconExternalLink, IconX, IconDownload, IconPhoto, IconLink, IconEye } from "@tabler/icons-react";
+import { IconDownload, IconPhoto, IconLink } from "@tabler/icons-react";
 
 import AddNew from "@/components/modal/AddNewRepo";
 import CleanRepo from "@/components/modal/CleanRepo";
@@ -11,6 +11,7 @@ import { TimeSerieChart } from "../charts/TimeSerieChart";
 import { generateCSVDataFromSeries } from "@/utils/csv";
 import { toPng } from 'html-to-image';
 import { Loading } from "../ui/Loading";
+import { DashboardElement } from "../dashboard/DashboardElement";
 
 
 const Dashboard: FC = () => {
@@ -131,52 +132,14 @@ const Dashboard: FC = () => {
                 onChange={(event) => setChecked(event.currentTarget.checked)}
               />
             </Box>
-            {repositories.map((repo, index) => (
-              <Box
-                p="0.5rem"
-                mb="0.5rem"
-                key={`${repo.owner}-${repo.name}`}
-                style={{border: '1px solid #e1e1e1', borderRadius: '5px'}}
-              >
-                <Flex justify="space-between">
-                  <Box>
-                    {repo.name}
-                  </Box>
-                  <Box>
-                    <a href={repo.html_url} target="_blank" rel="noreferrer">
-                      <ActionIcon
-                        mr="0.2rem"
-                        variant="default"
-                        radius="xl"
-                        aria-label="Settings"
-                      >
-                        <IconExternalLink style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      </ActionIcon>
-                    </a>
-                    <ActionIcon
-                      mr="0.2rem"
-                      variant="default"
-                      radius="xl"
-                      aria-label="Settings"
-                      onClick={() => toggleVisibility(repo)}
-                    >
-                      {repo.visible ? (
-                        <IconEye style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      ) : (
-                        <IconEyeOff style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      )}
-                    </ActionIcon>
-                    <ActionIcon
-                      variant="default"
-                      radius="xl"
-                      aria-label="Settings"
-                      onClick={() => removeRepository(repo)}
-                    >
-                      <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                    </ActionIcon>
-                  </Box>
-                </Flex>
-              </Box>
+
+            {repositories.map((repository, index) => (
+              <DashboardElement
+                key={repository.full_name}
+                element={repository}
+                onToggleVisibility={(repo: any) => toggleVisibility(repo)}
+                onRemove={(repo: any) => removeRepository(repo)}
+              />
             ))}
 
             <Box>
