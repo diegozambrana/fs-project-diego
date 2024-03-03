@@ -16,7 +16,8 @@ from .mongo import (
 )
 from .handlers import (
     get_diff_stargazers_by_date,
-    handle_repo_stargazers_history_complete
+    handle_repo_stargazers_history_complete,
+    fill_missing_rows_from_list,
 )
 
 logger = logging.getLogger(__name__)
@@ -128,6 +129,7 @@ def get_repo_stargazers_history_complete(repository_data):
     total_stargazers = repository_data['stargazers_count']
 
     data = get_repo_data_from_db(repository_data)
+    logger.info(f'~~~{repository_data["full_name"]} - {total_stargazers}')
 
     if data:
         # if data exists in db return it
@@ -149,6 +151,8 @@ def get_repo_stargazers_history_complete(repository_data):
         # Group by date and sum the stargazers
         result_data = handle_repo_stargazers_history_complete(result)
         result_data = json.loads(result_data)
+        if  total_stargazers > 0:
+            result_data = fill_missing_rows_from_list(result_data)
 
         # Insert data to MongoDB
         insert_repo_data_to_db(repository_data, result_data)

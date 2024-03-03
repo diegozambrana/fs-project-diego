@@ -120,6 +120,7 @@ def read_owner_repositories(name: str):
     predictions = forecast(data)
 
     return {
+        'count': len(data),
         'data': data,
         'forecast': predictions
     }
@@ -164,6 +165,7 @@ def read_stargazers(owner: str, repo_name: str):
         raise HTTPException(status_code=404, detail="Repository not found")
 
     return {
+        'count': len(data),
         'data': data,
         'forecast': predictions
     }

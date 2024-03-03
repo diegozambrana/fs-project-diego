@@ -62,5 +62,14 @@ def fill_missing_rows(df_original):
     df.set_index('date', inplace=True)
     df = df.resample('D').ffill()
     df = df.reset_index()
-
     return df
+
+def fill_missing_rows_from_list(list_original):
+    """
+    fill the missing rows in the list
+    some days are missing in the data, so the value are filled with the last value
+    """
+    df = fill_missing_rows(pd.DataFrame(list_original, columns=['date', 'count']))
+    df['date'] = df['date'].dt.strftime('%Y-%m-%d')
+    result = df.to_json(orient='records')
+    return json.loads(result)
