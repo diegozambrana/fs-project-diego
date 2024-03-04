@@ -20,7 +20,7 @@ export const DashboardPackagesWrapper: FC = () => {
           You must to search a Python Package.
         </Text>
         <Box ta="center" my="1rem">
-          <SearchModal typeData="package" />
+          <SearchModal typeData="package" title="Enter the python package name" />
         </Box>
       </>
     )

@@ -18,7 +18,7 @@ export default function CleanPackage() {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Add new Github url">
+      <Modal opened={opened} onClose={close} title="Clean Packages">
         <Text>Do you want to clean the Packages Download dashboard?</Text>
         <Box ta="right" mt="1rem">
           <Button mr="1rem" color="gray" onClick={close}>Cancel</Button>

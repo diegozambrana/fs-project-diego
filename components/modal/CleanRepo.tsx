@@ -5,7 +5,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconTrash } from "@tabler/icons-react";
 import { useContext } from 'react';
 import { DashboardRepositoryContext } from '../dashboardRepository/DashboardContext';
-// import { useRouter } from 'next/navigation'
 
 
 export default function CleanRepo() {
@@ -19,7 +18,7 @@ export default function CleanRepo() {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Add new Github url">
+      <Modal opened={opened} onClose={close} title="Clean repositories">
         <Text>Do you want to clean the Repository dashboard?</Text>
         <Box ta="right" mt="1rem">
           <Button mr="1rem" color="gray" onClick={close}>Cancel</Button>

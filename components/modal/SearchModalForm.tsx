@@ -60,14 +60,14 @@ export default function SearchModalForm({
       </Text> 
       <Text my="1rem" size="sm">
         <strong>Example: </strong><br />
-        &quot;facebook/react&quot; or &quot;https://github.com/facebook/react&quot;
+        &quot;nixtla/statsforecast&quot; or &quot;https://github.com/nixtla/statsforecast&quot;
       </Text>
       <form onSubmit={
         form.onSubmit(onSubmit)}>
         <Box my="1rem">
           <TextInput
             label={'Repository'}
-            placeholder={`"facebook/react" or "https://github.com/facebook/react"`}
+            placeholder={`"nixtla/statsforecast" or "https://github.com/nixtla/statsforecast"`}
             {...form.getInputProps('repository')}
           />
         </Box>
