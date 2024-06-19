@@ -1,0 +1,25 @@
+name: Deploy to Development
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: generate the project
+        env:
+          DOMAIN_API: ${{ vars.DOMAIN_API }}
+          SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+        run: |
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          echo "DOMAIN_API: $DOMAIN_API"
+          echo "SUPABASE_KEY: $SUPABASE_KEY"
+          echo "SUPABASE_URL: $SUPABASE_URL"
+          echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
